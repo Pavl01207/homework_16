@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<title>Task 4</title>
+</head>
+
+<body>
+	<script>
+		/*Створити клас TBankomat, який моделює роботу банкомата.
+		Клас повинен містити поля для зберігання кількості купюр кожного із номіналів від 5 до 200 гривень.
+		Реалізувати методи знаходження максимальної та мінімальної сум, які може видати банкомат, та метод зняття деякої суми.*/
+		class TBankomat {
+			constructor() {
+				this.bills = {
+					5: 0,
+					10: 0,
+					20: 0,
+					50: 0,
+					100: 0,
+					200: 0,
+				}
+			}
+			//метод для додавання купюр у банкомат
+			addBills(bill, count) {
+				this.bills[bill] += count
+			}
+			//метод для знаходження максимальної суми
+			getMaxWithdrawalAmount() {
+				let sum = 0
+				for (let bill in this.bills) {
+					sum += bill * this.bills[bill]
+				}
+				return sum
+			}
+			//метод для знаходження мінімальної суми
+			getMinWithdrawalAmount() {
+				for (let bill = 5; bill <= 200; bill += 5) {
+					if (this.bills[bill] > 0) {
+						return bill
+					}
+				}
+				return 0
+			}
+			//
+			toString(){
+				return `Залишок на рахунку ${this.getMaxWithdrawalAmount()}`
+			}
+			// метод, що знімає деяку суму з банкомата
+			withDraw(amount) {
+				let remainingAmount = amount
+				let withdrawnBills = {}
+				for (let bill in this.bills) {
+					const count = Math.min(Math.floor(remainingAmount / bill),this.bills[bill])
+					remainingAmount -= count * bill
+					withdrawnBills[bill] = count
+					this.bills[bill] -= count
+				}
+				if (remainingAmount !== 0) {
+					this.returnBills(withdrawnBills)
+					return 'Відсутні купюри для потрібної суми транзакції'
+				}
+				return withdrawnBills
+			}
+			// метод, що повертає купюри у випадку, якщо зняти гроші неможливо
+			returnBills(bills) {
+				for (let bill in bills) {
+					this.bills[bill] += bills[bill]
+				}
+			}
+		}
+		let bankomat = new TBankomat()
+		bankomat.addBills(5,10)
+		bankomat.addBills(10,10)
+		bankomat.addBills(20,10)
+		bankomat.addBills(50,10)
+		bankomat.addBills(100,10)
+		bankomat.addBills(200,10)
+		console.log(bankomat)
+		console.log(bankomat.getMaxWithdrawalAmount())
+		console.log(bankomat.getMinWithdrawalAmount())
+		document.write(bankomat)
+		console.log(bankomat.withDraw(100))	
+	</script>
+</body>
+</html>

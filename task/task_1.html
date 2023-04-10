@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<title>Task 1</title>
+</head>
+
+<body>
+	<script>
+	/*Створити клас TDate для роботи із датами у форматі “день.місяць.рік”. 
+	Дата представляється структурою із трьома полями. Реалізувати методи збільшення/зменшення дати на певну кількість днів, місяців чи років. 
+	Введення та виведення дати реалізувати за допомогою методу  toString.*/
+	class TDate {
+		constructor(day, month, year) {
+			this.day = day,
+			this.month = month,
+			this.year = year
+		}
+		// метод для збільшення/зменшення дати на певну кількість днів
+		addDays(days) {
+			const date = new Date(`${this.year}-${this.month}-${this.day}`)
+			date.setDate(date.getDate() + days)// задаємо нову кількість днів
+			this.day = date.getDate()
+			this.month = date.getMonth() + 1 // місяці в Date починаються з 0, тому додаємо 1
+			this.year = date.getFullYear()
+		}
+		// метод для збільшення/зменшення дати на певну кількість місяців
+		addMonths(months) {
+			let month = this.month + months
+			const yearDiff = Math.floor((month - 1) / 12)
+			const newYear = this.year + yearDiff
+			month = ((month - 1) % 12) + 1 // місяці починаються з 0, тому додаємо 1
+			const daysInMonth = new Date(newYear, month, 0).getDate() // Кількість днів у новому місяці
+			this.day = Math.min(this.day, daysInMonth) // Якщо день більший за кількість днів у місяці, встановлюємо останній день місяця
+			this.month = month
+			this.year = newYear
+		}
+		// метод для збільшення/зменшення дати на певну кількість років
+		addYears(years) {
+			this.year += years
+			const daysInMonth = new Date(this.year, this.month, 0).getDate() // Кількість днів у поточному місяці
+			this.day = Math.min(this.day, daysInMonth)// Якщо день більший за кількість днів у місяці, встановлюємо останній день місяця
+		}
+		toString() {
+			return `${this.day}.${this.month}.${this.year}`
+		}
+}
+
+// Приклад використання
+const date = new TDate(4, 4, 2023)
+document.write(`<p><span>${date}</span></p>`)
+//
+date.addDays(40)
+document.write(`<p>Дата після додавання 40 днів: <span>${date}</span>.</p>`)
+//
+date.addMonths(8)
+document.write(`<p>Дата після додавання 8 місяців: <span>${date}</span>.</p>`)
+//
+date.addYears(-4);
+document.write(`<p>Дата після віднімання 4 років: <span>${date}</span>.</p>`)
+	</script>
+</body>
+</html>

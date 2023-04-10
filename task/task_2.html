@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<title>Task 2</title>
+</head>
+
+<body>
+	<script>
+		/*
+		Створити клас TMoney для роботи з грошовими сумами. 
+		Сума повинна зберігатися у вигляді доларового еквіваленту. 
+		Реалізувати методи додавання/вилучення грошової маси, вказуючи необхідну суму у гривнях, 
+		та визначення курсу долара, при якому сума у гривнях збільшиться на 100. Курс долара зберігати в окремому полі. 
+		Вы создали клаасс и вызвали метод добаления денежной массы, например 10000, у вас курс к доллару фиксированный, 
+		с этих 10000 вышло 250 долларов, если по 40 курс. Ваша задача написать метод, 
+		который будет возвращать курс доллара при котором эти 10000 станут 10100
+		*/
+		//===Властивості===
+		//-   курс долара зберігати в окремому полі
+		//-   сума у вигляді доларовому еквіваленті
+		//===Методи===
+		//-   додавання грошової маси та переведення в доларовий еквівалент
+		//-   вилучення грошової маси та переведення в доларовий еквівалент
+		//-   визначення курсу долара, при якому сума у гривнях збільшиться на 100
+		class TMoney{
+			#dollars
+			constructor(initValueOfDollar,initValueOfStartMoney){
+				this.Dollars = initValueOfDollar,
+				this.amount = initValueOfStartMoney
+			}
+			get Dollars(){
+				return this.#dollars
+			}
+			//додавання грошової маси та переведення в доларовий еквівалент
+			augmentMoney(value){
+				return this.amount += value / this.Dollars
+			}
+			//вилучення грошової маси та переведення в доларовий еквівалент
+			separationMoney(value){
+				if((this.amount - (value / this.Dollars)) < 0) alert('Недостатньо коштів на рахунку')
+				else this.amount -= value / this.Dollars
+				return this.amount
+			}
+			set Dollars(value){
+				if(value <= 35 || value >= 45) throw new Error('Не відповідний розмір курса')
+				this.#dollars = value
+			}
+			toString(){
+				return `<p>Розмір рахунку в доларах: <span>${this.amount}$</span>, за курсом <span>${this.Dollars}₴</span> за <span>1$</span>, 
+				що еквівалентно сумі в гривнях в розмірі: <span>${this.amount * this.Dollars}₴</span>.</p>`
+			}
+			//визначення курсу долара, при якому сума у гривнях збільшиться на 100
+			makeNewValueOfDollars(value){
+				if((this.amount * value) - ((this.amount * this.Dollars)) >= 100) 
+				return value
+			}
+		}
+		let moneyAccount = new TMoney(40, 0)
+		console.log(moneyAccount)
+		moneyAccount.augmentMoney(1000)
+		console.log(moneyAccount)
+		moneyAccount.separationMoney(100)
+		console.log(moneyAccount)
+		document.write(moneyAccount)
+		document.write(`<p>Щоб дана сума в грувні збільшилась на 100₴, курс долару повинен становити більше <span>${moneyAccount.makeNewValueOfDollars(44.5)}</span>.</p>`)
+
+	</script>
+</body>
+</html>

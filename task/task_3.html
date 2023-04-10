@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<title>Task 3</title>
+</head>
+
+<body>
+	<script>
+		//“Фірма” (використати члени-класи)
+		//------Властивості--------
+		//▪	назва фірми;
+		//▪	дата заснування (рік, місяць);
+		//▪	послуги (назва послуги, вартість, термін виконання);
+		//▪	адреси філіалів (країна, місто, вулиця, номер будинку);
+		//------Методи-----------
+		//▪	визначення кількості років існування фірми;
+		//▪	виведення всіх філіалів фірми у вказаному місті;
+		//▪	виведення на екран послуг, що можуть бути виконані за вказану суму грошей та вказаний термін часу;
+		class Firm{
+			constructor(initTitle,initEstablishment,initServices,initBranch){
+				this.title = initTitle,
+				this.establishment = initEstablishment,
+				this.services = initServices,
+				this.branch = initBranch
+			}
+			//визначення кількості років існування фірми
+			getYearAfterEstablishment(year){
+				return year - this.establishment[1]
+			}
+			//виведення всіх філіалів фірми у вказаному місті
+			getBranchInCurrentCity(city){
+				let arr = []
+				for(let i = 0; i < this.branch.length; i++){
+					if(this.branch[i].city === city) arr.push(this.branch[i])
+				}
+				return arr
+			}
+			//виведення на екран послуг, що можуть бути виконані за вказану суму грошей та вказаний термін часу
+			getServicesByMoneyAndTime(money,time){
+				let arr = []
+				for(let i = 0; i < this.services.length; i++){
+					if(this.services[i].price <= money && this.services[i].time <= time) arr.push(this.services[i].title)
+				}
+				return arr
+			}
+			toString(){
+				return `Фірма <span>${this.title}</span> по виготовленні бурових установок, заснована <span>${this.establishment[1]}</span>`
+			}
+		}
+		//
+		class Service{
+			constructor(initData){
+				Object.assign(this,initData)
+			}
+			toString(){
+				return `Послуга: ${this.title}, час виконання: ${this.time}`
+			}
+		}
+		let servicesObj = [
+			new Service({title: 'перевезення',price: 1000,time: 2}),
+			new Service({title: 'складання',price: 500,time: 2}),
+			new Service({title: 'запуск',price: 200,time: 3})
+		]
+		//
+		class Branch{
+			constructor(initData){
+				Object.assign(this,initData)
+			}
+			toString(){
+				return `Філіал в місті ${this.city}, вул.${this.street},${this.number}`
+			}
+		}
+		let branchObj = [
+			new Branch({country: 'Україна',city: 'Чернівці',street: 'Головна',number: 12}),
+			new Branch({country: 'Україна',city: 'Чернівці',street: 'Головна',number: 283}),
+			new Branch({country: 'Польша',city: 'Познань',street: 'Соборності',number: 38}),
+			new Branch({country: 'Угорщина',city: 'Будапешт',street: 'Незалежності',number: 7})
+		]
+		let firmObj = new Firm('Company',[7,1993],servicesObj,branchObj)
+		document.write(firmObj)
+		//визначення кількості років існування фірми
+		document.write(`<p>Кількість років на ринку: <span>${firmObj.getYearAfterEstablishment(2023)}</span>.</p>`)
+		//виведення всіх філіалів фірми у вказаному місті
+		let userCity = prompt('Введіть місто для пошуку філіалу')
+		let firmInCity = firmObj.getBranchInCurrentCity(userCity)
+		if(firmInCity.length>0) for(let i = 0; i < firmInCity.length; i++){
+			document.write(`<p>Філіал присутній у місті ${userCity} по адресу 
+			вул.<span>${firmInCity[i].street}</span>,номер будинку <span>${firmInCity[i].number}</span></p>`)
+		}
+		else document.write(`<p>Філіал відсутній у місті ${userCity}</p>`)
+		//виведення на екран послуг, що можуть бути виконані за вказану суму грошей та вказаний термін часу
+		let userTime = parseInt(prompt('Вкажіть потрібний термін виконання в днях'))
+		let userMoney = parseInt(prompt('Вкажіть можливу суму за виконання(від 200$)'))
+		document.write(`<p>За суму <span>${userMoney}</span> та час виконання <span>${userTime}</span> 
+			днів Вам доступні такі послуги: <span>${firmObj.getServicesByMoneyAndTime(userMoney,userTime)}</span>.</p>`)
+	</script>
+</body>
+</html>
